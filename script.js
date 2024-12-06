@@ -4,6 +4,26 @@ const noteInput = document.getElementById('noteInput');
 const addNoteBtn = document.getElementById('addNoteBtn');
 const notesList = document.getElementById('notesList');
 
+// Retrieve notes from localStorage
+function getNotes() {
+    const notes = localStorage.getItem('notes');
+    return notes ? JSON.parse(notes) : [];
+}
+
+// Save notes to localStorage
+function saveNotes(notes) {
+    localStorage.setItem('notes', JSON.stringify(notes));
+}
+
+// Render all notes
+function renderNotes() {
+    const notes = getNotes();
+    notesList.innerHTML = ''; // Clear current list
+    notes.forEach(note => {
+        createNoteItem(note.title, note.content);
+    });
+}
+
 // Function to create a new note item
 function createNoteItem(title, noteText) {
     const noteItem = document.createElement('div');
@@ -24,7 +44,10 @@ function createNoteItem(title, noteText) {
     deleteBtn.textContent = 'Delete';
     deleteBtn.classList.add('delete-btn');
     deleteBtn.addEventListener('click', () => {
-        notesList.removeChild(noteItem);
+        const notes = getNotes();
+        const updatedNotes = notes.filter(note => note.title !== title || note.content !== noteText);
+        saveNotes(updatedNotes); // Save updated list
+        renderNotes(); // Re-render notes
     });
 
     // Create edit button
@@ -32,15 +55,14 @@ function createNoteItem(title, noteText) {
     editBtn.textContent = 'Edit';
     editBtn.classList.add('edit-btn');
     editBtn.addEventListener('click', () => {
-        // Populate inputs with current note content for editing
-        noteTitle.value = noteTitleElem.textContent;
-        noteInput.value = noteContentElem.textContent;
+        noteTitle.value = title;
+        noteInput.value = noteText;
 
-        // Remove the note item from the list
-        notesList.removeChild(noteItem);
-
-        // Scroll back to input for better UX
-        noteTitle.focus();
+        // Remove the note from localStorage
+        const notes = getNotes();
+        const updatedNotes = notes.filter(note => note.title !== title || note.content !== noteText);
+        saveNotes(updatedNotes); // Save updated list
+        renderNotes(); // Re-render notes
     });
 
     // Append title, content, delete button, and edit button to the note item
@@ -58,13 +80,24 @@ addNoteBtn.addEventListener('click', () => {
     const titleText = noteTitle.value.trim();
     const noteText = noteInput.value.trim();
     if (titleText !== "" && noteText !== "") {
+        // Save the new note to localStorage
+        const notes = getNotes();
+        notes.push({ title: titleText, content: noteText });
+        saveNotes(notes);
+
+        // Add the new note to the UI
         createNoteItem(titleText, noteText);
-        noteTitle.value = ""; // Clear title input after adding note
-        noteInput.value = "";  // Clear content input after adding note
+
+        // Clear input fields
+        noteTitle.value = "";
+        noteInput.value = "";
     } else {
         alert("Please enter both a title and note content!");
     }
 });
+
+// Load notes when the page is loaded
+document.addEventListener('DOMContentLoaded', renderNotes);
 
 // Allow pressing "Enter" to add a note (on the content field)
 noteInput.addEventListener('keypress', (e) => {
