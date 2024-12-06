@@ -130,3 +130,10 @@ body {
 .edit-btn:hover {
     background-color: #388e3c;
 }
+
+@media(min-width: 300px) and (max-width:720px){
+    .container {
+        padding: 20px;
+        margin: 0 10px;
+    }
+}
