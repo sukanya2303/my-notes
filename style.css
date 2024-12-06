@@ -19,7 +19,8 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 10px;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     text-align: center;
 }
 
@@ -100,7 +101,8 @@ body {
 .note-content {
     font-size: 1rem;
     color: #666;
-    width: 800px;
+    width: 100%;
+    padding: 5px;
 }
 
 .delete-btn {
@@ -116,6 +118,7 @@ body {
 .delete-btn:hover {
     background-color: #e60000;
 }
+
 .edit-btn {
     background-color: #4caf50;
     border: none;
@@ -131,9 +134,69 @@ body {
     background-color: #388e3c;
 }
 
-@media(min-width: 300px) and (max-width:720px){
+/* Media Queries for Responsiveness */
+
+/* Mobile view (less than 600px wide) */
+@media (max-width: 600px) {
     .container {
-        padding: 20px;
+        padding: 10px;
         margin: 0 10px;
+    }
+
+    .app-title {
+        font-size: 1.5rem;
+    }
+
+    .note-input, .note-title, .add-btn {
+        font-size: 0.9rem;
+        padding: 8px;
+    }
+
+    .note-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .note-title1 {
+        width: 100%;
+    }
+
+    .note-content {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .edit-btn, .delete-btn {
+        font-size: 0.8rem;
+        padding: 5px 8px;
+        margin: 5px 0;
+    }
+}
+
+/* Tablets or medium screens (600px to 900px wide) */
+@media (min-width: 601px) and (max-width: 900px) {
+    .container {
+        width: 90%;
+    }
+
+    .note-input, .note-title, .add-btn {
+        font-size: 1rem;
+    }
+
+    .note-item {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+/* Desktop and larger screens */
+@media (min-width: 901px) {
+    .container {
+        width: 600px;
+    }
+
+    .note-item {
+        flex-direction: row;
+        justify-content: space-between;
     }
 }
